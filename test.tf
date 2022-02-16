@@ -43,3 +43,11 @@ resource "aws_volume_attachment" "volume_attachment" {
     instance_id = element(aws_instance.sql_server.*.id, floor(count.index / var.volume_count))
 }
 */
+
+# Instance
+
+resource "aws_instance" "sql_server" {
+    ami               = "ami-005e54dee72cc1d00" # us-west-2
+    instance_type     = "t2.micro"
+    availability_zone = "us-west-1a"
+}
