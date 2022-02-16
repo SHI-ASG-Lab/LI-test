@@ -14,7 +14,7 @@ variable "volume_count" {
 }
 
 # Local Variable Declarations
-/*
+
 locals {
     counted      = var.instance_count * var.volume_count
     multi_volume = count.index % var.volume_count
@@ -27,14 +27,14 @@ resource "aws_ebs_volume" "ebs_volume" {
     availability_zone = aws_instance.sql_server[floor(count.index /var.volume_count)].availability_zone
     size              = var.additional_volume_size[local.multi_volume]
 }
-*/
 
+/*
 resource "aws_ebs_volume" "ebs_volume" {
     count             = var.instance_count * var.volume_count
     availability_zone = aws_instance.sql_server[floor(count.index /var.volume_count)].availability_zone
     size              = var.additional_volume_size[count.index % var.volume_count]
 }
-
+*/
 /*
 resource "aws_volume_attachment" "volume_attachment" {
     count       = var.instance_count * var.volume_count
@@ -44,7 +44,7 @@ resource "aws_volume_attachment" "volume_attachment" {
 }
 */
 
-# Instance
+# Instance Creation
 
 resource "aws_instance" "sql_server" {
     ami               = "ami-005e54dee72cc1d00" # us-west-2
