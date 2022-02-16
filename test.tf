@@ -13,34 +13,20 @@ variable "volume_count" {
     default = 3
 }
 
-# Local Variable Declarations
-
-locals {
-    counted      = var.instance_count * var.volume_count
-#    multi_volume = count.index % var.volume_count
-}
 
 # Resource Code Block
 
 # Size value changed
 resource "aws_ebs_volume" "ebs_volume" {
     count             = var.instance_count * var.volume_count
-    availability_zone = aws_instance.sql_server[floor(count.index / var.volume_count)].availability_zone
-    size              = var.additional_volume_size * count.index
+    availability_zone = aws_instance.sql_server[count.index].availability_zone
+    size              = var.additional_volume_size[count.index]
 }
-/*
-# Both count and size value changed
-resource "aws_ebs_volume" "ebs_volume" {
-    count             = local.counted
-    availability_zone = aws_instance.sql_server[floor(count.index /var.volume_count)].availability_zone
-    size              = var.additional_volume_size[local.multi_volume]
-}
-*/
 
 /*
 resource "aws_ebs_volume" "ebs_volume" {
     count             = var.instance_count * var.volume_count
-    availability_zone = aws_instance.sql_server[floor(count.index /var.volume_count)].availability_zone
+    availability_zone = aws_instance.sql_server[floor(count.index / var.volume_count)].availability_zone
     size              = var.additional_volume_size[count.index % var.volume_count]
 }
 */
