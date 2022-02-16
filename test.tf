@@ -17,7 +17,7 @@ variable "volume_count" {
 
 locals {
     counted      = var.instance_count * var.volume_count
-    multi_volume = count.index % var.volume_count
+#    multi_volume = count.index % var.volume_count
 }
 
 # Resource Code Block
