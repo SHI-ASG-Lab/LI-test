@@ -12,14 +12,30 @@ variable "volume_count" {
     type    = number
     default = 3
 }
+# Declare the data source
+data "aws_availability_zones" "available" {
+    all_availability_zones = true
+    state                  = "available"
+}
 
+locals {
+    az = toset(data.aws_availability_zones.available.names)
+}
 
 # Resource Code Block
 
 # Size value changed
+/*
 resource "aws_ebs_volume" "ebs_volume" {
-    count             = var.instance_count * var.volume_count
-    availability_zone = aws_instance.sql_server[count.index].availability_zone
+    count             = length[data.aws_availability_zones.available.names]
+    availability_zone = aws_instance.sql_server.availability_zone.name
+    size              = var.additional_volume_size
+}
+*/
+
+resource "aws_ebs_volume" "ebs_volume" {
+    for_each          = local.az
+    availability_zone = each.value
     size              = var.additional_volume_size
 }
 
