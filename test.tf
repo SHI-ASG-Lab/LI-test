@@ -24,7 +24,7 @@ locals {
 
 # Size value changed
 resource "aws_ebs_volume" "ebs_volume" {
-    count             = local.counted
+    count             = var.instance_count * var.volume_count
     availability_zone = aws_instance.sql_server[floor(count.index / var.volume_count)].availability_zone
     size              = var.additional_volume_size * (count.index % var.volume_count)
 }
