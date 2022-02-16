@@ -20,7 +20,7 @@ variable "volume_count" {
 resource "aws_ebs_volume" "ebs_volume" {
     count             = var.instance_count * var.volume_count
     availability_zone = aws_instance.sql_server[count.index].availability_zone
-    size              = var.additional_volume_size[count.index]
+    size              = var.additional_volume_size
 }
 
 /*
