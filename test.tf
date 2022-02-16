@@ -22,11 +22,20 @@ locals {
 
 # Resource Code Block
 
+# Size value changed
+resource "aws_ebs_volume" "ebs_volume" {
+    count             = local.counted
+    availability_zone = aws_instance.sql_server[floor(count.index /var.volume_count)].availability_zone
+    size              = var.additional_volume_size[count.index % var.volume_count]
+}
+/*
+# Both count and size value changed
 resource "aws_ebs_volume" "ebs_volume" {
     count             = local.counted
     availability_zone = aws_instance.sql_server[floor(count.index /var.volume_count)].availability_zone
     size              = var.additional_volume_size[local.multi_volume]
 }
+*/
 
 /*
 resource "aws_ebs_volume" "ebs_volume" {
@@ -35,6 +44,7 @@ resource "aws_ebs_volume" "ebs_volume" {
     size              = var.additional_volume_size[count.index % var.volume_count]
 }
 */
+
 /*
 resource "aws_volume_attachment" "volume_attachment" {
     count       = var.instance_count * var.volume_count
@@ -47,7 +57,7 @@ resource "aws_volume_attachment" "volume_attachment" {
 # Instance Creation
 
 resource "aws_instance" "sql_server" {
-    ami               = "ami-005e54dee72cc1d00" # us-west-2
+    ami               = "ami-005e54dee72cc1d00" # us-west-1
     instance_type     = "t2.micro"
     availability_zone = "us-west-1a"
 }
